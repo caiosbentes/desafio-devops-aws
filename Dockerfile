@@ -9,7 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar a aplicação
-COPY app.py .
+COPY src/app.py .
 
 # Expor a porta em que a aplicação vai rodar
 EXPOSE 5000
