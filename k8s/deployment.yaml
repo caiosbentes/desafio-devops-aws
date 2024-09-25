@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-api
+  labels:
+    app: comment-api
+spec:
+  selector:
+    matchLabels:
+      app: comment-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: comment-api
+    spec:
+      containers:
+      - name: comment-api
+        image: {ACR_REGISTRY}/{ACR_REPOSITORY}:{IMAGE_TAG}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "250Mi"
+          limits:
+            cpu: "250m"
+            memory: "250Mi"
+        ports:
+        - name: http
+          containerPort: 5000
+          protocol: TCP
