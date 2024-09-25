@@ -9,9 +9,30 @@ Este documento descreve como configurei um pipeline de CI/CD usando Docker, Amaz
 1. Criei um `Dockerfile` para empacotar a aplicação Python.
 2. No `Dockerfile`, usei uma imagem base Python, copiei os arquivos necessários e instalei as dependências.
 
-### 2. Configurei o Amazon ECR (Elastic Container Registry)
+Você pode usar construir e rodar o contêiner Docker
 
-1. Criei um repositório privado no Amazon ECR para armazenar as imagens Docker da aplicação.
+```sh
+docker build -t flask-comment-app .
+```
+
+```sh
+docker run -d -p 5000:5000 flask-comment-app
+```
+
+Você pode usar o curl ou uma ferramenta como o Postman para testar a API:
+
+
+```sh
+curl -X POST http://localhost:5000/api/comment/new -H "Content-Type: application/json" -d '{"email": "user@example.com", "comment": "Great post!", "content_id": 1}'
+```
+
+```sh
+curl http://localhost:5000/api/comment/list/1
+```
+
+### 2. Configurei o ACR
+
+1. Criei um repositório privado no ACR para armazenar as imagens Docker da aplicação.
 
 ### 3. Configurei o Amazon EKS (Elastic Kubernetes Service)
 
