@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: comment-api
+  labels:
+    app: comment-api
 spec:
   rules:
   - host: comment-api.com.br
