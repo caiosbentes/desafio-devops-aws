@@ -9,7 +9,7 @@ Este documento descreve a configuração de um pipeline de CI/CD utilizando Dock
 1. Criei um `Dockerfile` para empacotar a aplicação Python.
 2. No `Dockerfile`, utilizei uma imagem base Python, copiei os arquivos necessários e instalei as dependências.
 
-Para construir e executar o contêiner Docker, use os seguintes comandos:
+Para construir e executar o contêiner Docker localmente, use os seguintes comandos:
 
 ```sh
 docker build -t flask-comment-app .
@@ -45,9 +45,12 @@ curl http://localhost:5000/api/comment/list/1
    - **Build e push da imagem Docker para o ECR.**
    - **Deploy da nova versão no cluster EKS.**
 
-### 5. Definição dos Manifestos Kubernetes
+### 5. Configuração do repositório:
 
-1. Criei os arquivos de manifesto Kubernetes na pasta `k8s`, definindo como a aplicação será implantada no cluster EKS.
+Criei um repositório no GitHub com duas pastas principais:
+
+1. `src`: para o código-fonte da aplicação
+2. `k8s`: para os manifestos Kubernetes (YAML)
 
 ### 6. Configuração de Secrets
 
@@ -72,21 +75,12 @@ O pipeline automatiza o processo de build, push para o registry privado (ECR) e 
 
 Para implementar um deploy automatizado usando GitOps de ponta a ponta com GitHub Actions, ArgoCD, EKS e ECR, podemos seguir os seguintes passos:
 
-### 9. Configuração do repositório:
 
-Criei um repositório no GitHub com duas pastas principais:
-
-src: para o código-fonte da aplicação
-k8s: para os manifestos Kubernetes (YAML)
-
-
-
-
-### 10. Configuração do GitHub Actions:
+### 9. Configuração do GitHub Actions:
 Crie um workflow no GitHub Actions (.github/workflows/ci-cd.yml) que será acionado em cada commit na branch principal:
 GitHub Actions Workflow for CI/CDClick to open code
 
-### 11. Configuração do ArgoCD:
+### 10. Configuração do ArgoCD:
 
 Instale o ArgoCD no seu cluster EKS.
 Configure o ArgoCD para monitorar o repositório GitHub:
