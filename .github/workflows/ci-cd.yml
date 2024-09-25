@@ -10,16 +10,15 @@ env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: comentarios-api
   EKS_CLUSTER_NAME: meu-cluster-eks
-  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -40,11 +39,12 @@ jobs:
     - name: Update Kustomization
       run: |
         cd path/to/kustomize/dir
-        kustomize edit set image your-image-name:${{ github.sha }}
-    
+        kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
     - name: Commit changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -am "Update image to ${{ github.sha }}"
+        git add .
+        git commit -m "Update image to ${{ github.sha }}"
         git push
