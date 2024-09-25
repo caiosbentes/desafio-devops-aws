@@ -37,28 +37,20 @@ curl http://localhost:5000/api/comment/list/1
 
 1. Configurei um cluster EKS na AWS para hospedar a aplicação de forma escalável e segura.
 
-### 4. Criação do Pipeline de CI/CD com GitHub Actions
-
-1. Criei o arquivo `.github/workflows/ci-cd.yml` para definir o pipeline de CI/CD.
-2. Configurei o pipeline para ser acionado em pushs para a branch `main` ou em pull requests.
-3. Implementei as seguintes etapas no pipeline:
-   - **Build e push da imagem Docker para o ECR.**
-   - **Deploy da nova versão no cluster EKS.**
-
-### 5. Configuração do repositório:
+### 4. Configuração do repositório:
 
 Criei um repositório no GitHub com duas pastas principais:
 
 1. `src`: para o código-fonte da aplicação
 2. `k8s`: para os manifestos Kubernetes (YAML)
 
-### 6. Configuração de Secrets
+### 5. Configuração de Secrets
 
 1. Configurei as seguintes secrets no repositório GitHub:
    - `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`: Para autenticação na AWS.
    - `KUBE_CONFIG_DATA`: Configuração do `kubectl` para acesso ao cluster EKS.
 
-### 7. Implementação do Pipeline
+### 6. Implementação do Pipeline
 
 1. Criei um repositório no GitHub e fiz o push do código da aplicação, `Dockerfile` e arquivos de configuração.
 2. Configurei o ECR e o EKS na minha conta AWS.
@@ -67,7 +59,7 @@ Criei um repositório no GitHub com duas pastas principais:
 
 O pipeline automatiza o processo de build, push para o registry privado (ECR) e deploy no cluster EKS, garantindo que novas versões sejam disponibilizadas rapidamente e de forma consistente.
 
-### 8. Simulação de um Deploy Completo
+### 7. Simulação de um Deploy Completo
 
 1. Fiz alterações no código e criei um pull request.
 2. O pipeline foi acionado, realizando o build e testes da nova versão.
@@ -76,9 +68,12 @@ O pipeline automatiza o processo de build, push para o registry privado (ECR) e 
 Para implementar um deploy automatizado usando GitOps de ponta a ponta com GitHub Actions, ArgoCD, EKS e ECR, podemos seguir os seguintes passos:
 
 
-### 9. Configuração do GitHub Actions:
-Crie um workflow no GitHub Actions (.github/workflows/ci-cd.yml) que será acionado em cada commit na branch principal:
-GitHub Actions Workflow for CI/CDClick to open code
+### 8. Configuração do GitHub Actions:
+1. Criei o arquivo `.github/workflows/ci-cd.yml` para definir o pipeline de CI/CD.
+2. Configurei o pipeline para ser acionado em pushs para a branch `main` ou em pull requests.
+3. Implementei as seguintes etapas no pipeline:
+   - **Build e push da imagem Docker para o ECR.**
+   - **Deploy da nova versão no cluster EKS.**
 
 ### 10. Configuração do ArgoCD:
 
