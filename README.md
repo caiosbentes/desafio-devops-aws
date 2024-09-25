@@ -55,7 +55,7 @@ curl http://localhost:5000/api/comment/list/1
    - `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`: Para autenticação na AWS.
    - `KUBE_CONFIG_DATA`: Configuração do `kubectl` para acesso ao cluster EKS.
 
-## Implementação do Pipeline
+### 7. Implementação do Pipeline
 
 1. Criei um repositório no GitHub e fiz o push do código da aplicação, `Dockerfile` e arquivos de configuração.
 2. Configurei o ECR e o EKS na minha conta AWS.
@@ -64,20 +64,45 @@ curl http://localhost:5000/api/comment/list/1
 
 O pipeline automatiza o processo de build, push para o registry privado (ECR) e deploy no cluster EKS, garantindo que novas versões sejam disponibilizadas rapidamente e de forma consistente.
 
-## Simulação de um Deploy Completo
+### 8. Simulação de um Deploy Completo
 
 1. Fiz alterações no código e criei um pull request.
 2. O pipeline foi acionado, realizando o build e testes da nova versão.
 3. Após a aprovação e o merge do PR, o pipeline construiu a imagem final, fez o push para o ECR e atualizou o deployment no EKS.
 
-## Implementação de GitOps com ArgoCD
+Para implementar um deploy automatizado usando GitOps de ponta a ponta com GitHub Actions, ArgoCD, EKS e ECR, podemos seguir os seguintes passos:
 
-1. Instalei o ArgoCD no cluster EKS para gerenciar o estado desejado do cluster.
-2. Criei um repositório Git separado para armazenar os manifestos Kubernetes.
-3. Configurei o ArgoCD para monitorar este repositório e aplicar mudanças automaticamente.
-4. Ajustei o pipeline para atualizar o repositório de manifestos após o build da imagem.
-5. O ArgoCD detecta as mudanças e aplica automaticamente as atualizações no cluster.
+### 9. Configuração do repositório:
 
-## Conclusão
+Criei um repositório no GitHub com duas pastas principais:
 
-Esta solução implementa um pipeline de CI/CD automatizado utilizando Amazon ECR e EKS, integrando práticas de GitOps com ArgoCD. A configuração pode ser adaptada conforme necessário para atender aos requisitos específicos de cada projeto, fornecendo um fluxo de entrega contínua eficiente e escalável.
+src: para o código-fonte da aplicação
+k8s: para os manifestos Kubernetes (YAML)
+
+
+
+
+### 10. Configuração do GitHub Actions:
+Crie um workflow no GitHub Actions (.github/workflows/ci-cd.yml) que será acionado em cada commit na branch principal:
+GitHub Actions Workflow for CI/CDClick to open code
+
+### 11. Configuração do ArgoCD:
+
+Instale o ArgoCD no seu cluster EKS.
+Configure o ArgoCD para monitorar o repositório GitHub:
+```sh
+argocd app create my-app \
+  --repo https://github.com/seu-usuario/seu-repo.git \
+  --path k8s \
+  --dest-server https://kubernetes.default.svc \
+  --dest-namespace default \
+  --sync-policy automated
+```
+
+
+Fluxo de trabalho:
+a. Um desenvolvedor faz um commit e push para o repositório GitHub.
+b. O GitHub Actions é acionado, constrói a imagem Docker, faz push para o ECR e atualiza o manifesto Kubernetes com a nova tag de imagem.
+c. O ArgoCD detecta a mudança no repositório e aplica automaticamente as alterações no cluster EKS.
+
+Este fluxo automatiza o processo de deploy de ponta a ponta, desde o commit do desenvolvedor até a entrega no cluster EKS.
