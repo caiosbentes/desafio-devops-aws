@@ -41,14 +41,14 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-  commit-and-push:
+  update-image:
     runs-on: ubuntu-latest
     name: Update Kustomize Image Tag
     needs: build-and-push
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: Checkout current repository
+      uses: actions/checkout@v3}
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -58,6 +58,13 @@ jobs:
       id: get-commit-hash
       run: echo "::set-output name=commit-hash::$(git rev-parse --short HEAD)"
 
+    - name: Clone target repository
+      run: |
+        git clone https://github.com/caiosbentes/k8s.git
+        cd k8s
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
+        
     - name: Update Kustomization
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -66,11 +73,16 @@ jobs:
         cd k8s/
         kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Commit and push changes
+    - name: Configure Git
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and Push Changes
+      run: |
+        cd k8s
         git add kustomization.yaml
         git commit -m "Update image tag to ${{ steps.vars.outputs.short_sha }}"
-        git push origin main
-
+        git push https://username:personal-access-token@github.com/usuario/target-repo.git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
