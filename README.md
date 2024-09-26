@@ -78,7 +78,7 @@ Para implementar um deploy automatizado usando GitOps de ponta a ponta com GitHu
 ### 10. Configuração do ArgoCD:
 
 Instale o ArgoCD no seu cluster EKS.
-Configure o ArgoCD para monitorar o repositório GitHub:
+Configure o ArgoCD para monitorar um segundo repositório GitHub:
 ```sh
 argocd app create my-app \
   --repo https://github.com/seu-usuario/seu-repo.git \
@@ -88,10 +88,10 @@ argocd app create my-app \
   --sync-policy automated
 ```
 
-
 Fluxo de trabalho:
 a. Um desenvolvedor faz um commit e push para o repositório GitHub.
-b. O GitHub Actions é acionado, constrói a imagem Docker, faz push para o ECR e atualiza o manifesto Kubernetes com a nova tag de imagem.
+b. O GitHub Actions é acionado, constrói a imagem Docker, faz push para o ECR.
+c. A pipeline irá atualizar o repositório de manifestos após o build da imagem, mudando o manifesto kustomize para assumer uma nova tag.
 c. O ArgoCD detecta a mudança no repositório e aplica automaticamente as alterações no cluster EKS.
 
-Este fluxo automatiza o processo de deploy de ponta a ponta, desde o commit do desenvolvedor até a entrega no cluster EKS.
+Esta solução fornece um pipeline de CI/CD automatizado, usa um registry privado (ECR), e implementa GitOps com ArgoCD. Adaptar e expandir esta configuração conforme necessário para atender aos requisitos específicos do projeto.
